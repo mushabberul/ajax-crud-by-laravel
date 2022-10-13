@@ -6,6 +6,7 @@
 <!-- Modal -->
 <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
     <form action="" method="post">
+
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -15,28 +16,19 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <div id="errorMessage"></div>
                     <div class="form-group mb-3">
                         <label for="product_name">Product Name</label>
                         <input type="text" class="form-control" id="product_name" placeholder="Enter product name">
-                        @error('product_name')
-                        <div class="alert alert-danger" role="alert">
-                            {{$message}}
-                        </div>
-                        @enderror
                     </div>
                     <div class="form-group mb-3">
                         <label for="product_price">Price</label>
                         <input type="number" name="product_price" class="form-control" id="product_price" placeholder="Product price">
-                        @error('product_price')
-                        <div class="alert alert-danger" role="alert">
-                            {{$message}}
-                        </div>
-                        @enderror
                     </div>
                 </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" id="save_change" class="btn btn-primary">Save changes</button>
               </div>
             </div>
           </div>

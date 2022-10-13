@@ -14,12 +14,12 @@
             <div class="card-body">
                 <table class="table">
                     <thead>
-                      <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Produce Price</th>
-                        <th scope="col">Action</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Produce Price</th>
+                            <th scope="col">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
                       <tr>
@@ -38,8 +38,6 @@
     </div>
 @endsection
 
-
-
 @push('script')
 <script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 <script>
@@ -48,6 +46,27 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
-    
+    $(document).ready(function(){
+        $('#save_change').on('click',function(e){
+           e.preventDefault()
+
+           let product_name = $('#product_name').val()
+           let product_price = $('#product_price').val()
+
+           $.ajax({
+            method: 'post',
+            url: '/add-product',
+            data: {product_name:product_name,product_price:product_price},
+            success:function(res){
+                console.log(res);
+            },error:function(err){
+                let errorTest = err.responseJSON;
+                $.each(errorTest.errors,function(index,value){
+                    $('#errorMessage').append("<span class=text-danger>" + value + "</span><br>");
+                });
+            }
+           })
+        })
+    });
 </script>
 @endpush

@@ -10,4 +10,19 @@ class ProductController extends Controller
     {
         return view('pages.index');
     }
+
+    public function addProduct(Request $request)
+    {
+        $request->validate(
+            [
+            'product_name'=>'required',
+            'product_price'=>'required'
+            ],[
+                'product_name.required'=>'Product name is Required',
+                'product_price.required'=>'Product price is required',
+            ]
+        );
+
+
+    }
 }
