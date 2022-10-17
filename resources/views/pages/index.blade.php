@@ -39,7 +39,7 @@
 @endsection
 
 @push('script')
-<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script src="{{asset('assets/js/jquery-3.2.1.min.js')}}"></script>
 <script>
     $.ajaxSetup({
         headers: {
@@ -48,16 +48,19 @@
     });
     $(document).ready(function(){
         $('#save_change').on('click',function(e){
-           e.preventDefault()
+           e.preventDefault();
 
-           let product_name = $('#product_name').val()
-           let product_price = $('#product_price').val()
+
+           let product_name = $('#product_name').val();
+           let product_price = $('#product_price').val();
 
            $.ajax({
             method: 'post',
             url: '/add-product',
             data: {product_name:product_name,product_price:product_price},
             success:function(res){
+                $('#addProduct').modal('hide');
+                $('#formModal').trigger('reset');
                 console.log(res);
             },error:function(err){
                 let errorTest = err.responseJSON;

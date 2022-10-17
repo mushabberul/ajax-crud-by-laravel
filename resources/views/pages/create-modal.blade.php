@@ -1,11 +1,11 @@
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProduct">
+<button type="button" id="modalButton" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProduct">
     Add Product
 </button>
 
 <!-- Modal -->
 <div class="modal fade" id="addProduct" tabindex="-1" role="dialog" aria-labelledby="addProductLabel" aria-hidden="true">
-    <form action="" method="post">
+    <form id="formModal" action="" method="post">
 
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -19,11 +19,11 @@
                     <div id="errorMessage"></div>
                     <div class="form-group mb-3">
                         <label for="product_name">Product Name</label>
-                        <input type="text" class="form-control" id="product_name" placeholder="Enter product name">
+                        <input type="text" name="product_name" class="form-control" id="product_name" placeholder="Enter product name">
                     </div>
                     <div class="form-group mb-3">
                         <label for="product_price">Price</label>
-                        <input type="number" name="product_price" class="form-control" id="product_price" placeholder="Product price">
+                        <input type="text" name="product_price" class="form-control" id="product_price" placeholder="Product price">
                     </div>
                 </div>
               <div class="modal-footer">
