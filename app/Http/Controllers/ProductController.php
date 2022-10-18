@@ -9,7 +9,9 @@ class ProductController extends Controller
 {
     public function index()
     {
-        return view('pages.index');
+        $products = Product::latest('id')->select('id','product_name','product_price')->get();
+        //return $products;
+        return view('pages.index',compact('products'));
     }
 
     public function addProduct(Request $request)

@@ -21,16 +21,23 @@
                             <th scope="col">Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                      <tr>
-                        <th>1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>
-                            <a href="#" class="btn btn-info">Edit</a>
-                            <a href="#" class="btn btn-danger">Delete</a>
-                        </td>
-                      </tr>
+                    <tbody id="tbody">
+                        @forelse ($products as $key=>$product)
+                            <tr>
+                                <th>{{$product->id}}</th>
+                                <td>{{$product->product_name}}</td>
+                                <td>{{$product->product_price}}</td>
+                                <td>
+                                    <a href="#" class="btn btn-info">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </td>
+                              </tr>
+                        @empty
+                            <tr>
+                                <td colspan="99">Not found!</td>
+                            </tr>
+                        @endforelse
+
                     </tbody>
                   </table>
             </div>
@@ -59,12 +66,23 @@
             url: '/add-product',
             data: {product_name:product_name,product_price:product_price},
             success:function(res){
+                let $product_info = `<tr>
+                                <th>${res.id}</th>
+                                <td>${res.product_name}</td>
+                                <td>${res.product_price}</td>
+                                <td>
+                                    <a href="#" class="btn btn-info">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </td>
+                              </tr>`;
+                $('#tbody').prepend($product_info);
                 $('#addProduct').modal('hide');
                 $('#formModal').trigger('reset');
-                console.log(res);
+                console.log(res.product_name);
             },error:function(err){
-                let errorTest = err.responseJSON;
-                $.each(errorTest.errors,function(index,value){
+                //console.dir(err.responseJSON.errors.product_name);
+                //let errorTest = err.responseJSON;
+                $.each(err.responseJSON.errors,function(index,value){
                     $('#errorMessage').append("<span class=text-danger>" + value + "</span><br>");
                 });
             }
