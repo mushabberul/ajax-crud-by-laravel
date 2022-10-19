@@ -29,7 +29,7 @@
                                 <td>{{$product->product_price}}</td>
                                 <td>
                                     <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
-                                    <a href="#" class="btn btn-danger">Delete</a>
+                                    <a href="#" class="btn btn-danger destroy">Delete</a>
                                 </td>
                               </tr>
                         @empty
@@ -69,18 +69,17 @@
             data: {product_name:product_name,product_price:product_price},
             success:function(res){
                 let $product_info = `<tr data-id="${res.id}">
-                                <th>${res.id}</th>
-                                <td>${res.product_name}</td>
-                                <td>${res.product_price}</td>
-                                <td>
-                                    <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
-                                    <a href="#" class="btn btn-danger">Delete</a>
-                                </td>
-                              </tr>`;
+                    <th>${res.id}</th>
+                    <td>${res.product_name}</td>
+                    <td>${res.product_price}</td>
+                    <td>
+                        <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
+                        <a href="#" class="btn btn-danger">Delete</a>
+                    </td>
+                  </tr>`;
                 $('#tbody').prepend($product_info);
                 $('#addProduct').modal('hide');
                 $('#formModal').trigger('reset');
-                console.log(res.product_name);
             },error:function(err){
                 //console.dir(err.responseJSON.errors.product_name);
                 //let errorTest = err.responseJSON;
@@ -102,7 +101,6 @@
                     $('#edit_product_name').val(res.product_name);
                     $('#edit_product_price').val(res.product_price);
                     $('#update').attr('data-editid',res.id);
-                    console.log(res);
                 },
                 error: function(err){
                     console.log(err);
@@ -121,17 +119,16 @@
                 data: {product_name:product_name,product_price:product_price},
                 success:function(res){
                     let $product_info = `
-                                <th>${res.id}</th>
-                                <td>${res.product_name}</td>
-                                <td>${res.product_price}</td>
-                                <td>
-                                    <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
-                                    <a href="#" class="btn btn-danger">Delete</a>
-                                </td>`;
+                        <th>${res.id}</th>
+                        <td>${res.product_name}</td>
+                        <td>${res.product_price}</td>
+                        <td>
+                            <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
+                            <a href="#" class="btn btn-danger">Delete</a>
+                        </td>`;
                 $('.rowId'+id).html($product_info);
                 $('#editProduct').modal('hide');
                 $('#editFormModal').trigger('reset');
-                    console.log(res);
                 },
                 error:function(err){
                     console.log(err);
@@ -140,7 +137,21 @@
 
         });
 
+        //ajax data destroy
+        $('.destroy').on('click',function(){
+            let id = $(this).closest('tr').data('id');
 
+            $.ajax({
+                method: 'GET',
+                url: '/remove/product/'+id,
+                success:function(res){
+                    $('.rowId'+id).remove();
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+        });
     });
 
 </script>
