@@ -8,7 +8,7 @@
         <div class="card">
             <div class="card-header">
                 <h2 class="card-title">Product List</h2>
-                @include('pages.create-modal')
+                @include('pages.create')
             </div>
 
             <div class="card-body">
@@ -23,12 +23,12 @@
                     </thead>
                     <tbody id="tbody">
                         @forelse ($products as $key=>$product)
-                            <tr>
+                            <tr data-id="{{$product->id}}" class="rowId{{$product->id}}">
                                 <th>{{$product->id}}</th>
                                 <td>{{$product->product_name}}</td>
                                 <td>{{$product->product_price}}</td>
                                 <td>
-                                    <a href="#" class="btn btn-info">Edit</a>
+                                    <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
                                     <a href="#" class="btn btn-danger">Delete</a>
                                 </td>
                               </tr>
@@ -43,6 +43,8 @@
             </div>
         </div>
     </div>
+
+@include('pages.edit')
 @endsection
 
 @push('script')
@@ -54,9 +56,9 @@
         }
     });
     $(document).ready(function(){
+        //ajax data insert and show
         $('#save_change').on('click',function(e){
            e.preventDefault();
-
 
            let product_name = $('#product_name').val();
            let product_price = $('#product_price').val();
@@ -66,12 +68,12 @@
             url: '/add-product',
             data: {product_name:product_name,product_price:product_price},
             success:function(res){
-                let $product_info = `<tr>
+                let $product_info = `<tr data-id="${res.id}">
                                 <th>${res.id}</th>
                                 <td>${res.product_name}</td>
                                 <td>${res.product_price}</td>
                                 <td>
-                                    <a href="#" class="btn btn-info">Edit</a>
+                                    <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
                                     <a href="#" class="btn btn-danger">Delete</a>
                                 </td>
                               </tr>`;
@@ -87,7 +89,59 @@
                 });
             }
            })
-        })
+        });
+
+        //ajax data edit
+        $('.edit').on('click',function(){
+            let id = $(this).closest('tr').data('id');
+
+            $.ajax({
+                method: 'GET',
+                url: `/edit/product/${id}`,
+                success: function(res){
+                    $('#edit_product_name').val(res.product_name);
+                    $('#edit_product_price').val(res.product_price);
+                    $('#update').attr('data-editid',res.id);
+                    console.log(res);
+                },
+                error: function(err){
+                    console.log(err);
+                }
+            });
+        });
+        //ajax data update
+        $('#update').on('click',function(){
+            let id = $(this).data('editid');
+
+            let product_name = $('#edit_product_name').val();
+            let product_price = $('#edit_product_price').val();
+            $.ajax({
+                method: 'post',
+                url: '/update/product/'+id,
+                data: {product_name:product_name,product_price:product_price},
+                success:function(res){
+                    let $product_info = `
+                                <th>${res.id}</th>
+                                <td>${res.product_name}</td>
+                                <td>${res.product_price}</td>
+                                <td>
+                                    <a href="#" class="btn btn-info edit" data-bs-toggle="modal" data-bs-target="#editProduct">Edit</a>
+                                    <a href="#" class="btn btn-danger">Delete</a>
+                                </td>`;
+                $('.rowId'+id).html($product_info);
+                $('#editProduct').modal('hide');
+                $('#editFormModal').trigger('reset');
+                    console.log(res);
+                },
+                error:function(err){
+                    console.log(err);
+                }
+            });
+
+        });
+
+
     });
+
 </script>
 @endpush
